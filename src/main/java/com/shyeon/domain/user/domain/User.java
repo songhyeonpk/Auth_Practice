@@ -1,11 +1,10 @@
 package com.shyeon.domain.user.domain;
 
 import com.shyeon.global.common.BaseTimeEntity;
+import javax.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -17,14 +16,11 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_id")
     private Long id;
 
-    @Column
-    private String email;
+    @Column private String email;
 
-    @Column
-    private String password;
+    @Column private String password;
 
-    @Column
-    private String nickname;
+    @Column private String nickname;
 
     @Builder
     private User(String email, String password, String nickname) {
