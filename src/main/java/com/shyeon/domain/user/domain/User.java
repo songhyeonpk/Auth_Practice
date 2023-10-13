@@ -4,10 +4,12 @@ import com.shyeon.global.common.BaseTimeEntity;
 import javax.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Table(name = "users")
 public class User extends BaseTimeEntity {
 
