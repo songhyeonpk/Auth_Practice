@@ -1,5 +1,6 @@
 package com.shyeon.domain.user.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import javax.validation.constraints.Email;
@@ -7,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Getter
+@AllArgsConstructor
 public class SignupRequestDto {
 
     @NotBlank(message = "이메일은 필수 입력 값입니다.")
