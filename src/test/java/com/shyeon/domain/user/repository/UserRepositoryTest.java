@@ -1,5 +1,7 @@
 package com.shyeon.domain.user.repository;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.shyeon.domain.user.domain.User;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -7,13 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @DataJpaTest
 class UserRepositoryTest {
 
-    @Autowired
-    private UserRepository userRepository;
+    @Autowired private UserRepository userRepository;
 
     @Test
     @DisplayName("회원 저장 테스트")
@@ -21,15 +20,20 @@ class UserRepositoryTest {
         /*
         given
          */
-        User user = User.builder().email("ehftozl234@naver.com").password("thdgus!").nickname("헬로").build();
+        User user =
+                User.builder()
+                        .email("ehftozl234@naver.com")
+                        .password("thdgus!")
+                        .nickname("헬로")
+                        .build();
 
         /*
-         when
+        when
          */
         User resultUser = userRepository.save(user);
 
         /*
-         then
+        then
          */
         Assertions.assertThat(user.getEmail()).isEqualTo(resultUser.getEmail());
         Assertions.assertThat(user.getPassword()).isEqualTo(resultUser.getPassword());
@@ -42,8 +46,18 @@ class UserRepositoryTest {
         /*
         given
          */
-        User user1 = User.builder().email("ehftozl234@naver.com").password("thdgus!").nickname("헬로").build();
-        User user2 = User.builder().email("ehftozl234@naver.com").password("thdgus~").nickname("방망이").build();
+        User user1 =
+                User.builder()
+                        .email("ehftozl234@naver.com")
+                        .password("thdgus!")
+                        .nickname("헬로")
+                        .build();
+        User user2 =
+                User.builder()
+                        .email("ehftozl234@naver.com")
+                        .password("thdgus~")
+                        .nickname("방망이")
+                        .build();
 
         /*
         when
@@ -56,5 +70,4 @@ class UserRepositoryTest {
         Assertions.assertThat(userRepository.existsByEmail(user2.getEmail())).isTrue();
         Assertions.assertThat(userRepository.existsByNickname(user2.getNickname())).isFalse();
     }
-
 }
