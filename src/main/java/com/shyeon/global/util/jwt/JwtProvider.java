@@ -1,8 +1,6 @@
 package com.shyeon.global.util.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
@@ -11,14 +9,21 @@ import java.security.Key;
 import java.util.Calendar;
 import java.util.Date;
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
+
+import io.jsonwebtoken.security.SignatureException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 @Component
 @RequiredArgsConstructor
 public class JwtProvider {
+
+    public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String BEARER_PREFIX = "Bearer ";
 
     @Getter
     @Value("${jwt.secret.key}")
@@ -71,5 +76,40 @@ public class JwtProvider {
     private Date getTokenExpiration(long expirationMillisecond) {
         Date date = new Date();
         return new Date(date.getTime() + expirationMillisecond);
+    }
+
+    // Request Header 에서 Access Token 값 추출
+    public String resolveAccessToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
+
+    // Access Token 검증
+    public Claims validateToken(String token) {
+        try {
+            return parseClaims(token);
+        } catch (MalformedJwtException e) {
+            throw new RuntimeException("Malformed Tokens.");
+        } catch (UnsupportedJwtException e) {
+            throw new RuntimeException("Unsupported Tokens.");
+        } catch (SignatureException e) {
+            throw new RuntimeException("Signature Exceptions.");
+        } catch (ExpiredJwtException e) {
+            throw new RuntimeException("Expired Tokens.");
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("JWT Claims is Empty.");
+        }
+    }
+
+    // token parse
+    private Claims parseClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }
