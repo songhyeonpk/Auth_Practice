@@ -1,9 +1,7 @@
 package com.shyeon.domain.user.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
@@ -14,7 +12,7 @@ public class LoginResponseDto {
     private String nickname;
     private Tokens tokens;
 
-    public static LoginResponseDto of (Long id, String email, String nickname, Tokens tokens) {
+    public static LoginResponseDto of(Long id, String email, String nickname, Tokens tokens) {
         return LoginResponseDto.builder()
                 .id(id)
                 .email(email)

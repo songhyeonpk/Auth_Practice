@@ -59,18 +59,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public LoginResponseDto login(LoginRequestDto request) {
         // 회원 조회
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("해당 회원을 찾을 수 없습니다."));
+        User user =
+                userRepository
+                        .findByEmail(request.getEmail())
+                        .orElseThrow(() -> new RuntimeException("해당 회원을 찾을 수 없습니다."));
 
         // 회원 인증
         String encryptPassword = passwordEncoder.encrypt(request.getEmail(), request.getPassword());
-        if(!user.getPassword().equals(encryptPassword)) {
+        if (!user.getPassword().equals(encryptPassword)) {
             throw new RuntimeException("비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
         }
 
         // AccessToken 발급
         String accessToken = jwtProvider.generateAccessToken(request.getEmail());
 
-        return LoginResponseDto.of(user.getId(), user.getEmail(), user.getNickname(), Tokens.from(accessToken));
+        return LoginResponseDto.of(
+                user.getId(), user.getEmail(), user.getNickname(), Tokens.from(accessToken));
     }
 }
