@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.Optional;
+
 @DataJpaTest
 class UserRepositoryTest {
 
@@ -69,5 +71,23 @@ class UserRepositoryTest {
          */
         Assertions.assertThat(userRepository.existsByEmail(user2.getEmail())).isTrue();
         Assertions.assertThat(userRepository.existsByNickname(user2.getNickname())).isFalse();
+    }
+
+    @Test
+    @DisplayName("회원 조회 테스트")
+    void findUser() {
+        // given
+        User user = User.builder()
+                .email("ehftozl234@naver.com")
+                .password("thdgus!")
+                .nickname("헬로우")
+                .build();
+
+        // when
+        userRepository.save(user);
+        User saveUser = userRepository.findByEmail(user.getEmail()).orElse(null);
+
+        // then
+        Assertions.assertThat(saveUser).isNotNull();
     }
 }
