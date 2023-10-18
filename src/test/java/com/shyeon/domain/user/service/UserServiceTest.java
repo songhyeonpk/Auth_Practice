@@ -2,7 +2,6 @@ package com.shyeon.domain.user.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 import com.shyeon.domain.user.domain.User;
@@ -12,8 +11,8 @@ import com.shyeon.domain.user.dto.SignupRequestDto;
 import com.shyeon.domain.user.repository.UserRepository;
 import com.shyeon.global.util.PasswordEncoder;
 import com.shyeon.global.util.jwt.JwtProvider;
+import java.util.Optional;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,21 +20,16 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.Optional;
-
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
     @Mock private UserRepository userRepository;
 
-    @Mock
-    private PasswordEncoder passwordEncoder;
+    @Mock private PasswordEncoder passwordEncoder;
 
-    @Mock
-    private JwtProvider jwtProvider;
+    @Mock private JwtProvider jwtProvider;
 
-    @InjectMocks
-    private UserServiceImpl userService;
+    @InjectMocks private UserServiceImpl userService;
 
     @Test
     @DisplayName("회원가입 성공 테스트")
@@ -43,18 +37,23 @@ class UserServiceTest {
         // given
         SignupRequestDto request = new SignupRequestDto("ehftozl234@naver.com", "thdgus!", "헬로우");
 
-        User user = User.builder().email(request.getEmail()).password("hashed_password").nickname(request.getNickname()).build();
+        User user =
+                User.builder()
+                        .email(request.getEmail())
+                        .password("hashed_password")
+                        .nickname(request.getNickname())
+                        .build();
         ReflectionTestUtils.setField(user, "id", 1L);
 
         // stub
         given(userRepository.existsByEmail(request.getEmail())).willReturn(false);
         given(userRepository.existsByNickname(request.getNickname())).willReturn(false);
-        given(passwordEncoder.encrypt(request.getEmail(), request.getPassword())).willReturn("hashed_password");
+        given(passwordEncoder.encrypt(request.getEmail(), request.getPassword()))
+                .willReturn("hashed_password");
         given(userRepository.save(any(User.class))).willReturn(user);
 
         // when
         Long userId = userService.register(request);
-
 
         // then
         Assertions.assertThat(user.getId()).isEqualTo(userId);
@@ -71,7 +70,8 @@ class UserServiceTest {
 
         // stub
         given(userRepository.findByEmail(request.getEmail())).willReturn(Optional.of(user));
-        given(passwordEncoder.encrypt(request.getEmail(), request.getPassword())).willReturn("hashed_password");
+        given(passwordEncoder.encrypt(request.getEmail(), request.getPassword()))
+                .willReturn("hashed_password");
         given(jwtProvider.generateAccessToken(request.getEmail())).willReturn("access_token");
 
         // when
@@ -89,11 +89,13 @@ class UserServiceTest {
         // given
         LoginRequestDto request = new LoginRequestDto("ehftozl234@naver.com", "thdgus!");
 
-        User user = User.builder().email("ehftozl234@naver.com").password("hashed_password").build();
+        User user =
+                User.builder().email("ehftozl234@naver.com").password("hashed_password").build();
 
         // stub
         given(userRepository.findByEmail(request.getEmail())).willReturn(Optional.of(user));
-        given(passwordEncoder.encrypt(request.getEmail(), request.getPassword())).willReturn("fake_password");
+        given(passwordEncoder.encrypt(request.getEmail(), request.getPassword()))
+                .willReturn("fake_password");
         given(jwtProvider.generateAccessToken(request.getEmail())).willReturn("access_token");
 
         // when

@@ -10,8 +10,6 @@ public class Tokens {
     String accessToken;
 
     public static Tokens from(String accessToken) {
-        return Tokens.builder()
-                .accessToken(accessToken)
-                .build();
+        return Tokens.builder().accessToken(accessToken).build();
     }
 }

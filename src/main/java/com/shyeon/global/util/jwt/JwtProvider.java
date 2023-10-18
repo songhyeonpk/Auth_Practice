@@ -6,16 +6,15 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Calendar;
 import java.util.Date;
+import javax.annotation.PostConstruct;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
@@ -54,15 +53,16 @@ public class JwtProvider {
         // 이메일 값으로 Claims 생성
         Claims claims = Jwts.claims().setSubject(email);
 
-        String accessToken = Jwts.builder()
-                // Claims 셋팅
-                .setClaims(claims)
-                // 시작시간
-                .setIssuedAt(Calendar.getInstance().getTime())
-                // 만료시간
-                .setExpiration(accessTokenExpiresIn)
-                .signWith(SignatureAlgorithm.HS256, key)
-                .compact();
+        String accessToken =
+                Jwts.builder()
+                        // Claims 셋팅
+                        .setClaims(claims)
+                        // 시작시간
+                        .setIssuedAt(Calendar.getInstance().getTime())
+                        // 만료시간
+                        .setExpiration(accessTokenExpiresIn)
+                        .signWith(SignatureAlgorithm.HS256, key)
+                        .compact();
 
         return accessToken;
     }
