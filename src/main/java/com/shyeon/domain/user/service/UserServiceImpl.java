@@ -1,10 +1,7 @@
 package com.shyeon.domain.user.service;
 
 import com.shyeon.domain.user.domain.User;
-import com.shyeon.domain.user.dto.LoginRequestDto;
-import com.shyeon.domain.user.dto.LoginResponseDto;
-import com.shyeon.domain.user.dto.SignupRequestDto;
-import com.shyeon.domain.user.dto.Tokens;
+import com.shyeon.domain.user.dto.*;
 import com.shyeon.domain.user.repository.UserRepository;
 import com.shyeon.global.util.PasswordEncoder;
 import com.shyeon.global.util.jwt.JwtProvider;
@@ -75,5 +72,16 @@ public class UserServiceImpl implements UserService {
 
         return LoginResponseDto.of(
                 user.getId(), user.getEmail(), user.getNickname(), Tokens.from(accessToken));
+    }
+
+    @Override
+    public UserInfoResponseDto myInfo(String accessToken) {
+        // Access Token 검증 및 토큰에 저장된 회원 이메일 정보 가져오기
+        String email = jwtProvider.validateToken(accessToken).getSubject();
+
+        // 회원 조회
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+
+        return UserInfoResponseDto.from(user);
     }
 }
