@@ -14,3 +14,9 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+
+jwt:
+  secret:
+    key: ${JWT_SECRET_KEY}
+  token:
+    access-token-expiration-millis: 900000
