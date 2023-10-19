@@ -3,16 +3,16 @@ package com.shyeon.domain.user.controller;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shyeon.domain.user.dto.LoginRequestDto;
-import com.shyeon.domain.user.dto.LoginResponseDto;
-import com.shyeon.domain.user.dto.SignupRequestDto;
-import com.shyeon.domain.user.dto.Tokens;
+import com.shyeon.domain.user.domain.User;
+import com.shyeon.domain.user.dto.*;
 import com.shyeon.domain.user.service.UserService;
+import com.shyeon.global.util.jwt.JwtProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,6 +28,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 class UserControllerTest {
 
     @Mock private UserService userService;
+
+    @Mock private JwtProvider jwtProvider;
 
     @InjectMocks private UserController userController;
 
@@ -84,6 +86,30 @@ class UserControllerTest {
                         jsonPath("$.id").value(1L),
                         jsonPath("$.email").value(request.getEmail()),
                         jsonPath("$.tokens.accessToken").value("access_token"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("내 정보 조회 API")
+    void myInfoTest() throws Exception {
+        // given
+        User user = User.builder().email("ehftozl234@naver.com").password("hashed_password").nickname("헬로우").build();
+        UserInfoResponseDto response = UserInfoResponseDto.from(user);
+
+
+        // stub
+        given(jwtProvider.resolveAccessToken(any())).willReturn("access_token");
+        given(userService.myInfo("access_token")).willReturn(response);
+
+        // when & then
+        mockMvc.perform(get("/api/v1/user/me")
+                .header("Authorization", "Bearer access_token"))
+                .andExpectAll(
+                        status().isOk(),
+                        content().contentType(MediaType.APPLICATION_JSON),
+                        jsonPath("$.email").value(user.getEmail()),
+                        jsonPath("$.nickname").value(user.getNickname())
+                )
                 .andDo(print());
     }
 }
