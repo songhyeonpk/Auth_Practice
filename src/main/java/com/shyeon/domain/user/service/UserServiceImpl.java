@@ -80,7 +80,10 @@ public class UserServiceImpl implements UserService {
         String email = jwtProvider.validateToken(accessToken).getSubject();
 
         // 회원 조회
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+        User user =
+                userRepository
+                        .findByEmail(email)
+                        .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
 
         return UserInfoResponseDto.from(user);
     }

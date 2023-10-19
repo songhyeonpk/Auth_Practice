@@ -93,23 +93,25 @@ class UserControllerTest {
     @DisplayName("내 정보 조회 API")
     void myInfoTest() throws Exception {
         // given
-        User user = User.builder().email("ehftozl234@naver.com").password("hashed_password").nickname("헬로우").build();
+        User user =
+                User.builder()
+                        .email("ehftozl234@naver.com")
+                        .password("hashed_password")
+                        .nickname("헬로우")
+                        .build();
         UserInfoResponseDto response = UserInfoResponseDto.from(user);
-
 
         // stub
         given(jwtProvider.resolveAccessToken(any())).willReturn("access_token");
         given(userService.myInfo("access_token")).willReturn(response);
 
         // when & then
-        mockMvc.perform(get("/api/v1/user/me")
-                .header("Authorization", "Bearer access_token"))
+        mockMvc.perform(get("/api/v1/user/me").header("Authorization", "Bearer access_token"))
                 .andExpectAll(
                         status().isOk(),
                         content().contentType(MediaType.APPLICATION_JSON),
                         jsonPath("$.email").value(user.getEmail()),
-                        jsonPath("$.nickname").value(user.getNickname())
-                )
+                        jsonPath("$.nickname").value(user.getNickname()))
                 .andDo(print());
     }
 }
