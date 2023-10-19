@@ -5,11 +5,9 @@ import com.shyeon.domain.user.dto.LoginResponseDto;
 import com.shyeon.domain.user.dto.SignupRequestDto;
 import com.shyeon.domain.user.dto.UserInfoResponseDto;
 import com.shyeon.domain.user.service.UserService;
-
+import com.shyeon.global.util.jwt.JwtProvider;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
-import com.shyeon.global.util.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

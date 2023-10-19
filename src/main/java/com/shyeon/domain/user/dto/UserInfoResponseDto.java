@@ -1,11 +1,9 @@
 package com.shyeon.domain.user.dto;
 
 import com.shyeon.domain.user.domain.User;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
-import net.bytebuddy.asm.Advice;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -17,7 +15,7 @@ public class UserInfoResponseDto {
     private LocalDateTime joinDate;
     private LocalDateTime lastUpdatedDate;
 
-    public static UserInfoResponseDto from (User user) {
+    public static UserInfoResponseDto from(User user) {
         return UserInfoResponseDto.builder()
                 .id(user.getId())
                 .email(user.getEmail())
