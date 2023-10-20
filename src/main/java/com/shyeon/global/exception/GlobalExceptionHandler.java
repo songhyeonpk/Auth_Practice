@@ -1,9 +1,7 @@
 package com.shyeon.global.exception;
 
 import com.shyeon.global.exception.customexception.CustomException;
-import com.shyeon.global.exception.customexception.UserCustomException;
 import com.shyeon.global.exception.errorcode.CommonErrorCode;
-import com.shyeon.global.exception.errorcode.UserErrorCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -24,8 +22,7 @@ public class GlobalExceptionHandler {
     // CustomException
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<ErrorResponse> customError(CustomException e) {
-        final ErrorResponse response =
-                ErrorResponse.from(e.getErrorCode());
+        final ErrorResponse response = ErrorResponse.from(e.getErrorCode());
         return ResponseEntity.status(e.getErrorCode().getStatus()).body(response);
     }
 }
