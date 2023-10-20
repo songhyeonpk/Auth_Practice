@@ -3,7 +3,6 @@ package com.shyeon.domain.user.service;
 import com.shyeon.domain.user.domain.User;
 import com.shyeon.domain.user.dto.*;
 import com.shyeon.domain.user.repository.UserRepository;
-import com.shyeon.global.exception.customexception.CustomException;
 import com.shyeon.global.exception.customexception.UserCustomException;
 import com.shyeon.global.util.PasswordEncoder;
 import com.shyeon.global.util.jwt.JwtProvider;
