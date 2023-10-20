@@ -3,6 +3,8 @@ package com.shyeon.domain.user.service;
 import com.shyeon.domain.user.domain.User;
 import com.shyeon.domain.user.dto.*;
 import com.shyeon.domain.user.repository.UserRepository;
+import com.shyeon.global.exception.customexception.CustomException;
+import com.shyeon.global.exception.customexception.UserCustomException;
 import com.shyeon.global.util.PasswordEncoder;
 import com.shyeon.global.util.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
@@ -42,14 +44,14 @@ public class UserServiceImpl implements UserService {
     // email 중복확인
     private void existEmail(String email) {
         if (userRepository.existsByEmail(email)) {
-            throw new RuntimeException("이미 사용중인 이메일입니다.");
+            throw UserCustomException.ALREADY_EMAIL;
         }
     }
 
     // 닉네임 중복확인
     private void existNickname(String nickname) {
         if (userRepository.existsByNickname(nickname)) {
-            throw new RuntimeException("이미 사용중인 닉네임입니다.");
+            throw UserCustomException.ALREADY_NICKNAME;
         }
     }
 
@@ -59,12 +61,12 @@ public class UserServiceImpl implements UserService {
         User user =
                 userRepository
                         .findByEmail(request.getEmail())
-                        .orElseThrow(() -> new RuntimeException("해당 회원을 찾을 수 없습니다."));
+                        .orElseThrow(() -> UserCustomException.NOT_FOUND_USER);
 
         // 회원 인증
         String encryptPassword = passwordEncoder.encrypt(request.getEmail(), request.getPassword());
         if (!user.getPassword().equals(encryptPassword)) {
-            throw new RuntimeException("비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
+            throw UserCustomException.INVALID_AUTHENTICATION;
         }
 
         // AccessToken 발급
@@ -83,7 +85,7 @@ public class UserServiceImpl implements UserService {
         User user =
                 userRepository
                         .findByEmail(email)
-                        .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+                        .orElseThrow(() -> UserCustomException.NOT_FOUND_USER);
 
         return UserInfoResponseDto.from(user);
     }
