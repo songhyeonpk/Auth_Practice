@@ -1,5 +1,6 @@
 package com.shyeon.global.util.jwt;
 
+import com.shyeon.global.exception.customexception.TokenCustomException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
@@ -91,15 +92,15 @@ public class JwtProvider {
         try {
             return parseClaims(token);
         } catch (MalformedJwtException e) {
-            throw new RuntimeException("Malformed Tokens.");
+            throw TokenCustomException.MALFORMED_TOKEN;
         } catch (UnsupportedJwtException e) {
-            throw new RuntimeException("Unsupported Tokens.");
+            throw TokenCustomException.WRONG_TYPE_TOKEN;
         } catch (SignatureException e) {
-            throw new RuntimeException("Signature Exceptions.");
+            throw TokenCustomException.WRONG_TYPE_SIGNATURE;
         } catch (ExpiredJwtException e) {
-            throw new RuntimeException("Expired Tokens.");
+            throw TokenCustomException.EXPIRED_TOKEN;
         } catch (IllegalArgumentException e) {
-            throw new RuntimeException("JWT Claims is Empty.");
+            throw TokenCustomException.DOES_NOT_EXIST_TOKEN;
         }
     }
 
