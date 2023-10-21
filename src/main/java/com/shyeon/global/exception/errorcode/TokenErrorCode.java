@@ -25,11 +25,11 @@ public enum TokenErrorCode implements ErrorCode {
 
     @Override
     public String getCode() {
-        return this.getCode();
+        return this.code;
     }
 
     @Override
     public String getMessage() {
-        return this.getMessage();
+        return this.message;
     }
 }
