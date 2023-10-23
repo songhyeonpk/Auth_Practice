@@ -19,4 +19,8 @@ public interface UserService {
     // 내 정보 조회
     @Transactional(readOnly = true)
     UserInfoResponseDto myInfo(String accessToken);
+
+    // 내 정보 조회, 필터
+    @Transactional(readOnly = true)
+    UserInfoResponseDto myInfoWithFilter(String email);
 }
