@@ -22,6 +22,8 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+        logger.info("ExceptionFilter Run.");
+
         try {
             filterChain.doFilter(request, response);
         } catch (TokenCustomException e) {
@@ -33,7 +35,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         ObjectMapper objectMapper = new ObjectMapper();
 
         response.setStatus(errorCode.getStatus().value());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(objectMapper.writeValueAsString(ErrorResponse.from(errorCode)));
     }
 }
