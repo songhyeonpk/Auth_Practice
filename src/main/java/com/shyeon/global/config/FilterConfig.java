@@ -31,7 +31,7 @@ public class FilterConfig {
     @Bean
     public FilterRegistrationBean<AuthorizationFilter> authorizationFilterRegistration(AuthorizationFilter authorizationFilter) {
         FilterRegistrationBean<AuthorizationFilter> registration = new FilterRegistrationBean<>(authorizationFilter);
-        registration.addUrlPatterns("/**/me");
+        registration.addUrlPatterns("/**/filter");
         registration.setOrder(1);
         return registration;
     }
@@ -39,7 +39,7 @@ public class FilterConfig {
     @Bean
     public FilterRegistrationBean<ExceptionHandlerFilter> exceptionHandlerFilterRegistration(ExceptionHandlerFilter exceptionHandlerFilter) {
         FilterRegistrationBean<ExceptionHandlerFilter> registration = new FilterRegistrationBean<>(exceptionHandlerFilter);
-        registration.addUrlPatterns("/**/me");
+        registration.addUrlPatterns("/**/filter");
         registration.setOrder(2);
         return registration;
     }
