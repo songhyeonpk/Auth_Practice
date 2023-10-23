@@ -45,7 +45,7 @@ public class UserController {
     // 마이페이지 (내 정보 조회) 필터 적용
     @GetMapping("/api/v1/user/me/filter")
     public ResponseEntity<UserInfoResponseDto> myInfoWithFilter(HttpServletRequest request) {
-        String email = request.getHeader("email");
+        String email = String.valueOf(request.getAttribute("email"));
         return ResponseEntity.status(HttpStatus.OK).body(userService.myInfoWithFilter(email));
     }
 }
