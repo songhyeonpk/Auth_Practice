@@ -29,6 +29,8 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+        logger.info("AuthorizationFilter Run.");
+
         // request header 에서 access token 추출
         String accessToken = jwtProvider.resolveAccessToken(request);
 
