@@ -18,20 +18,20 @@ public class FilterConfig {
 
     @Bean
     public AuthorizationFilter authorizationFilter() {
-        log.info("Authorization Filter Run.");
+        log.info("Authorization Filter Register.");
         return new AuthorizationFilter(jwtProvider);
     }
 
     @Bean
     public ExceptionHandlerFilter exceptionHandlerFilter() {
-        log.info("Exception Filter Run.");
+        log.info("Exception Filter Register.");
         return new ExceptionHandlerFilter();
     }
 
     @Bean
     public FilterRegistrationBean<AuthorizationFilter> authorizationFilterRegistration(AuthorizationFilter authorizationFilter) {
         FilterRegistrationBean<AuthorizationFilter> registration = new FilterRegistrationBean<>(authorizationFilter);
-        registration.addUrlPatterns("/**/filter");
+        registration.addUrlPatterns("/api/v1/user/me/filter");
         registration.setOrder(1);
         return registration;
     }
@@ -39,8 +39,8 @@ public class FilterConfig {
     @Bean
     public FilterRegistrationBean<ExceptionHandlerFilter> exceptionHandlerFilterRegistration(ExceptionHandlerFilter exceptionHandlerFilter) {
         FilterRegistrationBean<ExceptionHandlerFilter> registration = new FilterRegistrationBean<>(exceptionHandlerFilter);
-        registration.addUrlPatterns("/**/filter");
-        registration.setOrder(2);
+        registration.addUrlPatterns("/api/v1/user/me/filter");
+        registration.setOrder(0);
         return registration;
     }
 
