@@ -88,9 +88,10 @@ public class JwtProvider {
     }
 
     // Access Token 검증
-    public Claims validateToken(String token) {
+    public boolean validateToken(String token) {
         try {
-            return parseClaims(token);
+            parseClaims(token);
+            return true;
         } catch (MalformedJwtException e) {
             throw TokenCustomException.MALFORMED_TOKEN;
         } catch (UnsupportedJwtException e) {
@@ -105,7 +106,7 @@ public class JwtProvider {
     }
 
     // token parse
-    private Claims parseClaims(String token) {
+    public Claims parseClaims(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 }
