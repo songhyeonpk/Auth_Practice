@@ -77,8 +77,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserInfoResponseDto myInfo(String accessToken) {
-        // Access Token 검증 및 토큰에 저장된 회원 이메일 정보 가져오기
-        String email = jwtProvider.validateToken(accessToken).getSubject();
+        // Access Token 검증
+        jwtProvider.validateToken(accessToken);
+
+        // 토큰에 저장된 회원 이메일 정보 가져오기
+        String email = jwtProvider.parseClaims(accessToken).getSubject();
 
         // 회원 조회
         User user =
