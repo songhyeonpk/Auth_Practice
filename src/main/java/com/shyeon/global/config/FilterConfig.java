@@ -29,19 +29,22 @@ public class FilterConfig {
     }
 
     @Bean
-    public FilterRegistrationBean<AuthorizationFilter> authorizationFilterRegistration(AuthorizationFilter authorizationFilter) {
-        FilterRegistrationBean<AuthorizationFilter> registration = new FilterRegistrationBean<>(authorizationFilter);
+    public FilterRegistrationBean<AuthorizationFilter> authorizationFilterRegistration(
+            AuthorizationFilter authorizationFilter) {
+        FilterRegistrationBean<AuthorizationFilter> registration =
+                new FilterRegistrationBean<>(authorizationFilter);
         registration.addUrlPatterns("/api/v1/user/me/filter");
         registration.setOrder(1);
         return registration;
     }
 
     @Bean
-    public FilterRegistrationBean<ExceptionHandlerFilter> exceptionHandlerFilterRegistration(ExceptionHandlerFilter exceptionHandlerFilter) {
-        FilterRegistrationBean<ExceptionHandlerFilter> registration = new FilterRegistrationBean<>(exceptionHandlerFilter);
+    public FilterRegistrationBean<ExceptionHandlerFilter> exceptionHandlerFilterRegistration(
+            ExceptionHandlerFilter exceptionHandlerFilter) {
+        FilterRegistrationBean<ExceptionHandlerFilter> registration =
+                new FilterRegistrationBean<>(exceptionHandlerFilter);
         registration.addUrlPatterns("/api/v1/user/me/filter");
         registration.setOrder(0);
         return registration;
     }
-
 }
