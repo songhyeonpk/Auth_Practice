@@ -91,4 +91,11 @@ public class UserServiceImpl implements UserService {
 
         return UserInfoResponseDto.from(user);
     }
+
+    @Override
+    public UserInfoResponseDto myInfoWithFilter(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> UserCustomException.NOT_FOUND_USER);
+
+        return UserInfoResponseDto.from(user);
+    }
 }
