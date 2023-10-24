@@ -48,4 +48,11 @@ public class UserController {
         String email = String.valueOf(request.getAttribute("email"));
         return ResponseEntity.status(HttpStatus.OK).body(userService.myInfoWithFilter(email));
     }
+
+    // 마이페이지 (내 정보 조회) 인터셉터 적용
+    @GetMapping("/api/v1/user/me/interceptor")
+    public ResponseEntity<UserInfoResponseDto> myInfoWithInterceptor(HttpServletRequest request) {
+        String email = String.valueOf(request.getAttribute("email"));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.myInfoWithInterceptor(email));
+    }
 }
