@@ -6,8 +6,10 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+@Slf4j
 @RequiredArgsConstructor
 public class AuthorizationFilter extends OncePerRequestFilter {
 
@@ -17,7 +19,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(
             HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
-        logger.info("AuthorizationFilter Run.");
+        log.info("AuthorizationFilter Run.");
 
         // request header 에서 access token 추출
         String accessToken = jwtProvider.resolveAccessToken(request);
