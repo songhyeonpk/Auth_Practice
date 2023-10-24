@@ -17,32 +17,22 @@ public class FilterConfig {
     private final JwtProvider jwtProvider;
 
     @Bean
-    public AuthorizationFilter authorizationFilter() {
+    public FilterRegistrationBean<AuthorizationFilter> authorizationFilterRegistration() {
         log.info("Authorization Filter Register.");
-        return new AuthorizationFilter(jwtProvider);
-    }
 
-    @Bean
-    public ExceptionHandlerFilter exceptionHandlerFilter() {
-        log.info("Exception Filter Register.");
-        return new ExceptionHandlerFilter();
-    }
-
-    @Bean
-    public FilterRegistrationBean<AuthorizationFilter> authorizationFilterRegistration(
-            AuthorizationFilter authorizationFilter) {
         FilterRegistrationBean<AuthorizationFilter> registration =
-                new FilterRegistrationBean<>(authorizationFilter);
+                new FilterRegistrationBean<>(new AuthorizationFilter(jwtProvider));
         registration.addUrlPatterns("/api/v1/user/me/filter");
         registration.setOrder(1);
         return registration;
     }
 
     @Bean
-    public FilterRegistrationBean<ExceptionHandlerFilter> exceptionHandlerFilterRegistration(
-            ExceptionHandlerFilter exceptionHandlerFilter) {
+    public FilterRegistrationBean<ExceptionHandlerFilter> exceptionHandlerFilterRegistration() {
+        log.info("Exception Filter Register.");
+
         FilterRegistrationBean<ExceptionHandlerFilter> registration =
-                new FilterRegistrationBean<>(exceptionHandlerFilter);
+                new FilterRegistrationBean<>(new ExceptionHandlerFilter());
         registration.addUrlPatterns("/api/v1/user/me/filter");
         registration.setOrder(0);
         return registration;
