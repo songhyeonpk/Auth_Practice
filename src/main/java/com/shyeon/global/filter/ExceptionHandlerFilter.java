@@ -9,7 +9,6 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -25,7 +24,10 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
         } catch (TokenCustomException e) {
-            log.error("code : {}, message : {}", e.getErrorCode().getCode(), e.getErrorCode().getMessage());
+            log.error(
+                    "code : {}, message : {}",
+                    e.getErrorCode().getCode(),
+                    e.getErrorCode().getMessage());
             setErrorResponse(response, e.getErrorCode());
         }
     }
