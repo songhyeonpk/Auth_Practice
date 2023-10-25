@@ -29,30 +29,40 @@ public class AuthorizationAop {
     public Object authorization(ProceedingJoinPoint joinPoint) throws Throwable {
         log.info("Authorization AOP Run.");
 
+        // 동작 메소드에 포함된 Authorization 객체 정보 가져오기
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        Method method = signature.getMethod();
+        Authorization auth = method.getAnnotation(Authorization.class);
+
+        // Request 정보에서 Access Token 값 추출
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = requestAttributes.getRequest();
-
-        Object[] modifiedArgs = joinPoint.getArgs();
-
         String accessToken = jwtProvider.resolveAccessToken(request);
         try {
-            if(jwtProvider.validateToken(accessToken)) {
+            log.info(String.valueOf(auth.bindEmail()));
+
+            /*
+             * Access Token 검증 및 바인딩 여부 확인
+             * 토큰이 유효하지 않으면 예외처리
+             * 토큰이 유효하고 이메일 데이터가 필요한 요청이면 파라미터 바인딩 로직 수행
+             * 토큰이 유효하고 이메일 데이터가 필요하지 않은 요청이면 바로 컨트롤러 메소드 수행
+             */
+            if(jwtProvider.validateToken(accessToken) && auth.bindEmail()) {
                 String email = jwtProvider.parseClaims(accessToken).getSubject();
-                modifiedArgs = modifyArgsWithEmail(joinPoint, email);
+                Object[] modifiedArgs = modifyArgsWithEmail(joinPoint.getArgs(), signature, email);
+
+                return joinPoint.proceed(modifiedArgs);
             }
+
+            return joinPoint.proceed();
         } catch (TokenCustomException e) {
             log.error("error_code : {}, message : {}", e.getErrorCode(), e.getErrorCode().getMessage());
             throw e;
         }
-
-        return joinPoint.proceed(modifiedArgs);
     }
 
-    // @Authorization 어노테이션이 붙어있는 메소드의 파라미터 값 조작
-    private Object[] modifyArgsWithEmail(ProceedingJoinPoint joinPoint, String email) {
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-
-        Object[] args = joinPoint.getArgs();
+    // 이메일 값을 컨트롤러 파라미터로 바인딩
+    private Object[] modifyArgsWithEmail(Object[] args, MethodSignature signature, String email) {
         String[] parameterNames = signature.getParameterNames();
 
         boolean parameterFound = false;
