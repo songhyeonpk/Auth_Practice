@@ -5,6 +5,7 @@ import com.shyeon.domain.user.dto.LoginResponseDto;
 import com.shyeon.domain.user.dto.SignupRequestDto;
 import com.shyeon.domain.user.dto.UserInfoResponseDto;
 import com.shyeon.domain.user.service.UserService;
+import com.shyeon.global.aop.Authorization;
 import com.shyeon.global.util.jwt.JwtProvider;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -54,5 +55,12 @@ public class UserController {
     public ResponseEntity<UserInfoResponseDto> myInfoWithInterceptor(HttpServletRequest request) {
         String email = String.valueOf(request.getAttribute("email"));
         return ResponseEntity.status(HttpStatus.OK).body(userService.myInfoWithInterceptor(email));
+    }
+
+    // 마이페이지 (내 정보 조회) AOP 적용
+    @GetMapping("/api/v1/user/me/aop")
+    @Authorization
+    public ResponseEntity<UserInfoResponseDto> myInfoWithAop(String email) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.myInfoWithAop(email));
     }
 }
