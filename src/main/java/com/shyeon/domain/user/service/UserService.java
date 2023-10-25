@@ -27,4 +27,8 @@ public interface UserService {
     // 내 정보 조회, 인터셉터
     @Transactional(readOnly = true)
     UserInfoResponseDto myInfoWithInterceptor(String email);
+
+    // 내 정보 조회, AOP
+    @Transactional(readOnly = true)
+    UserInfoResponseDto myInfoWithAop(String email);
 }
