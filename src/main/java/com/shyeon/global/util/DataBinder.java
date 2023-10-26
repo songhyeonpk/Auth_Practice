@@ -17,15 +17,15 @@ public class DataBinder {
         String[] parameterNames = signature.getParameterNames();
         boolean bindEmail = false;
 
-        for(int i = 0; i < parameterNames.length; i++) {
-            if(parameterNames[i].equals("email")) {
+        for (int i = 0; i < parameterNames.length; i++) {
+            if (parameterNames[i].equals("email")) {
                 args[i] = email;
                 bindEmail = true;
                 break;
             }
         }
 
-        if(!bindEmail) {
+        if (!bindEmail) {
             throw CommonCustomException.DOES_NOT_EXIST_PARAMETER_IN_METHOD;
         }
 

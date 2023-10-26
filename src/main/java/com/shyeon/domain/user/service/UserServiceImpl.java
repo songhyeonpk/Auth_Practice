@@ -114,15 +114,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserInfoResponseDto myInfoWithAop(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> UserCustomException.NOT_FOUND_USER);
+        User user =
+                userRepository
+                        .findByEmail(email)
+                        .orElseThrow(() -> UserCustomException.NOT_FOUND_USER);
 
         return UserInfoResponseDto.from(user);
     }
 
     @Override
     public UserInfoResponseDto selectUserWithAop(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> UserCustomException.NOT_FOUND_USER);
+        User user =
+                userRepository
+                        .findById(userId)
+                        .orElseThrow(() -> UserCustomException.NOT_FOUND_USER);
 
         return UserInfoResponseDto.from(user);
     }
