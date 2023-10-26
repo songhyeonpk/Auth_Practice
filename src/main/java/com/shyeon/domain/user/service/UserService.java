@@ -31,4 +31,8 @@ public interface UserService {
     // 내 정보 조회, AOP
     @Transactional(readOnly = true)
     UserInfoResponseDto myInfoWithAop(String email);
+
+    // 회원 정보 조회, AOP
+    @Transactional(readOnly = true)
+    UserInfoResponseDto selectUserWithAop(Long userId);
 }
