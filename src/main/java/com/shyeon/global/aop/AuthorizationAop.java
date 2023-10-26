@@ -2,6 +2,7 @@ package com.shyeon.global.aop;
 
 import com.shyeon.global.exception.customexception.CommonCustomException;
 import com.shyeon.global.exception.customexception.TokenCustomException;
+import com.shyeon.global.util.DataBinder;
 import com.shyeon.global.util.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ import java.lang.reflect.Method;
 public class AuthorizationAop {
 
     private final JwtProvider jwtProvider;
+    private final DataBinder dataBinder;
 
     @Around("@annotation(com.shyeon.global.aop.Authorization)")
     public Object authorization(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -45,11 +47,11 @@ public class AuthorizationAop {
              * Access Token 검증 및 바인딩 여부 확인
              * 토큰이 유효하지 않으면 예외처리
              * 토큰이 유효하고 이메일 데이터가 필요한 요청이면 파라미터 바인딩 로직 수행
-             * 토큰이 유효하고 이메일 데이터가 필요하지 않은 요청이면 바로 컨트롤러 메소드 수행
+             * 토큰이 유효하고 이메일 데이터가 필요하지 않은 요청이면 바로 컨트롤러 요청 동작
              */
             if(jwtProvider.validateToken(accessToken) && auth.bindEmail()) {
                 String email = jwtProvider.parseClaims(accessToken).getSubject();
-                Object[] modifiedArgs = modifyArgsWithEmail(joinPoint.getArgs(), signature, email);
+                Object[] modifiedArgs = dataBinder.emailBind(joinPoint.getArgs(), signature, email);
 
                 return joinPoint.proceed(modifiedArgs);
             }
@@ -59,25 +61,5 @@ public class AuthorizationAop {
             log.error("error_code : {}, message : {}", e.getErrorCode(), e.getErrorCode().getMessage());
             throw e;
         }
-    }
-
-    // 이메일 값을 컨트롤러 파라미터로 바인딩
-    private Object[] modifyArgsWithEmail(Object[] args, MethodSignature signature, String email) {
-        String[] parameterNames = signature.getParameterNames();
-
-        boolean parameterFound = false;
-        for(int i = 0; i < parameterNames.length; i++) {
-            if(parameterNames[i].equals("email")) {
-                args[i] = email;
-                parameterFound = true;
-                break;
-            }
-        }
-
-        if(!parameterFound) {
-            throw CommonCustomException.DOES_NOT_EXIST_PARAMETER_IN_METHOD;
-        }
-
-        return args;
     }
 }
