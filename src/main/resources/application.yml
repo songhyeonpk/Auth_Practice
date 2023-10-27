@@ -20,3 +20,12 @@ jwt:
     key: ${JWT_SECRET_KEY}
   token:
     access-token-expiration-millis: 900000
+
+oauth:
+  kakao:
+    client_id: ${KAKAO_RESTAPI_KEY}
+    client_secret: ${KAKAO_CLIENT_SECRET_KEY}
+    redirect_uri: http://localhost:8080/kakao/callback
+    request_uri:
+      auth: https://kauth.kakao.com # 카카오 인증 서버로 토큰 값 요청
+      api: https://kapi.kakao.com # 카카오 서버로 사용자 정보 요청
