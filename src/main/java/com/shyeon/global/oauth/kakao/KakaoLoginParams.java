@@ -8,8 +8,7 @@ import org.springframework.util.MultiValueMap;
 
 public class KakaoLoginParams implements OAuthLoginParams {
 
-    @Getter
-    private String authorizationCode;
+    @Getter private String authorizationCode;
 
     @Override
     public OAuthProvider getProvider() {
@@ -23,6 +22,4 @@ public class KakaoLoginParams implements OAuthLoginParams {
 
         return body;
     }
-
-
 }
