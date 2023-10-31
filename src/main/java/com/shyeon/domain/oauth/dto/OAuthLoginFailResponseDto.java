@@ -12,8 +12,9 @@ public class OAuthLoginFailResponseDto extends OAuthLoginResponseDto {
 
     private String result;
 
-    public static OAuthLoginFailResponseDto of (OAuthInfoResponse oAuthInfoResponse, String result) {
+    public static OAuthLoginFailResponseDto of (boolean isLoginSuccess, OAuthInfoResponse oAuthInfoResponse, String result) {
         return OAuthLoginFailResponseDto.builder()
+                .isLoginSuccess(isLoginSuccess)
                 .oAuthProvider(oAuthInfoResponse.getOAuthProvider())
                 .oAuthId(oAuthInfoResponse.getOAuthId())
                 .nickname(oAuthInfoResponse.getOAuthNickname())
