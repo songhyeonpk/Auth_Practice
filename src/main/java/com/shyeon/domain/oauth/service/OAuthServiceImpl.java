@@ -29,10 +29,15 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     private OAuthLoginResponseDto responseOAuthLogin(OAuthInfoResponse oAuthInfoResponse) {
-        User user = userRepository.findByEmail(oAuthInfoResponse.getOAuthProvider() + "_" + oAuthInfoResponse.getOAuthId())
-                .orElse(null);
+        User user =
+                userRepository
+                        .findByEmail(
+                                oAuthInfoResponse.getOAuthProvider()
+                                        + "_"
+                                        + oAuthInfoResponse.getOAuthId())
+                        .orElse(null);
 
-        if(user != null) {
+        if (user != null) {
             String accessToken = jwtProvider.generateAccessToken(user.getEmail());
 
             return OAuthLoginSuccessResponseDto.of(true, user, Tokens.from(accessToken));
@@ -49,19 +54,20 @@ public class OAuthServiceImpl implements OAuthService {
         // 닉네임 중복확인
         existsNickname(signupRequest.getNickname());
 
-        User user = User.builder()
-                .email(provider + "_" + signupRequest.getOauthId())
-                .nickname(signupRequest.getNickname())
-                .oAuthProvider(provider)
-                .oAuthId(signupRequest.getOauthId())
-                .build();
+        User user =
+                User.builder()
+                        .email(provider + "_" + signupRequest.getOauthId())
+                        .nickname(signupRequest.getNickname())
+                        .oAuthProvider(provider)
+                        .oAuthId(signupRequest.getOauthId())
+                        .build();
 
         return userRepository.save(user).getId();
     }
 
     // 닉네임 중복 확인
     private void existsNickname(String nickname) {
-        if(userRepository.existsByNickname(nickname)) {
+        if (userRepository.existsByNickname(nickname)) {
             throw UserCustomException.ALREADY_NICKNAME;
         }
     }

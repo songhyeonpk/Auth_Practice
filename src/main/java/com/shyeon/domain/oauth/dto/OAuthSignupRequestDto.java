@@ -1,11 +1,9 @@
 package com.shyeon.domain.oauth.dto;
 
-import com.shyeon.global.oauth.OAuthProvider;
-import lombok.Getter;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import lombok.Getter;
 
 @Getter
 public class OAuthSignupRequestDto {
