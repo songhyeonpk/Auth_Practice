@@ -35,10 +35,10 @@ public class OAuthServiceImpl implements OAuthService {
         if(user != null) {
             String accessToken = jwtProvider.generateAccessToken(user.getEmail());
 
-            return OAuthLoginSuccessResponseDto.of(user, Tokens.from(accessToken));
+            return OAuthLoginSuccessResponseDto.of(true, user, Tokens.from(accessToken));
         }
 
-        return OAuthLoginFailResponseDto.of(oAuthInfoResponse, "회원가입이 필요합니다.");
+        return OAuthLoginFailResponseDto.of(false, oAuthInfoResponse, "소셜 간편 회원가입이 필요합니다.");
     }
 
     @Override
