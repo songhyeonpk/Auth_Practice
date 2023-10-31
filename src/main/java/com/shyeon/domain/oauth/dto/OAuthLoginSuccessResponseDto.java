@@ -14,8 +14,9 @@ public class OAuthLoginSuccessResponseDto extends OAuthLoginResponseDto {
     private Long id;
     private Tokens tokens;
 
-    public static OAuthLoginSuccessResponseDto of (User user, Tokens tokens) {
+    public static OAuthLoginSuccessResponseDto of (boolean isLoginSuccess, User user, Tokens tokens) {
         return OAuthLoginSuccessResponseDto.builder()
+                .isLoginSuccess(isLoginSuccess)
                 .oAuthProvider(user.getOAuthProvider())
                 .oAuthId(user.getOAuthId())
                 .nickname(user.getNickname())
