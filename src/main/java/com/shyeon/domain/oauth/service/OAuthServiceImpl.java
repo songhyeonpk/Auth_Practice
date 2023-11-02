@@ -22,6 +22,11 @@ public class OAuthServiceImpl implements OAuthService {
     private final JwtProvider jwtProvider;
 
     @Override
+    public String responseOAuthCode(String provider, String code) {
+        return provider + " : " + code;
+    }
+
+    @Override
     public OAuthLoginResponseDto oAuthLogin(OAuthLoginParams oAuthLoginParams) {
         OAuthInfoResponse response = requestOAuthApiClientService.requestOAuth(oAuthLoginParams);
 
