@@ -1,6 +1,5 @@
 package com.shyeon.global.oauth.google;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.shyeon.global.oauth.OAuthInfoResponse;
@@ -16,7 +15,6 @@ public class GoogleInfoResponse implements OAuthInfoResponse {
 
     @JsonProperty("name")
     private String googleName;
-
 
     @Override
     public OAuthProvider getOAuthProvider() {

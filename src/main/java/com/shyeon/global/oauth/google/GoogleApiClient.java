@@ -4,17 +4,14 @@ import com.shyeon.global.oauth.OAuthApiClient;
 import com.shyeon.global.oauth.OAuthInfoResponse;
 import com.shyeon.global.oauth.OAuthLoginParams;
 import com.shyeon.global.oauth.OAuthProvider;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
-
-import javax.servlet.http.HttpServletResponse;
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 
 @Component
 @Slf4j
@@ -52,16 +49,21 @@ public class GoogleApiClient implements OAuthApiClient {
         requestParams.add("client_secret", clientSecret);
         requestParams.add("redirect_uri", redirectUri);
 
-        GoogleTokens tokens = webClient.post()
-                .headers(header -> {
-                    header.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-                    header.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-                    header.setAcceptCharset(Collections.singletonList(StandardCharsets.UTF_8));
-                })
-                .bodyValue(requestParams)
-                .retrieve()
-                .bodyToMono(GoogleTokens.class)
-                .block();
+        GoogleTokens tokens =
+                webClient
+                        .post()
+                        .headers(
+                                header -> {
+                                    header.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+                                    header.setAccept(
+                                            Collections.singletonList(MediaType.APPLICATION_JSON));
+                                    header.setAcceptCharset(
+                                            Collections.singletonList(StandardCharsets.UTF_8));
+                                })
+                        .bodyValue(requestParams)
+                        .retrieve()
+                        .bodyToMono(GoogleTokens.class)
+                        .block();
 
         log.info("Google Access_Token : " + tokens.getAccessToken());
         log.info("Google Refresh_Token : " + tokens.getRefreshToken());
@@ -78,16 +80,19 @@ public class GoogleApiClient implements OAuthApiClient {
         log.info(accessToken);
         WebClient webClient = WebClient.create(apiUri);
 
-        GoogleInfoResponse response = webClient.get()
-                .headers(header -> {
-                    header.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-                    header.setAcceptCharset(
-                            Collections.singletonList(StandardCharsets.UTF_8));
-                    header.set("Authorization", "Bearer " + accessToken);
-                })
-                .retrieve()
-                .bodyToMono(GoogleInfoResponse.class)
-                .block();
+        GoogleInfoResponse response =
+                webClient
+                        .get()
+                        .headers(
+                                header -> {
+                                    header.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+                                    header.setAcceptCharset(
+                                            Collections.singletonList(StandardCharsets.UTF_8));
+                                    header.set("Authorization", "Bearer " + accessToken);
+                                })
+                        .retrieve()
+                        .bodyToMono(GoogleInfoResponse.class)
+                        .block();
 
         log.info(response.getOAuthId());
         log.info(response.getOAuthNickname());
