@@ -3,15 +3,13 @@ package com.shyeon.domain.oauth.controller;
 import com.shyeon.domain.oauth.dto.OAuthLoginResponseDto;
 import com.shyeon.domain.oauth.dto.OAuthSignupRequestDto;
 import com.shyeon.domain.oauth.service.OAuthService;
+import com.shyeon.global.oauth.google.GoogleLoginParams;
 import com.shyeon.global.oauth.kakao.KakaoLoginParams;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,5 +32,11 @@ public class OAuthController {
     public ResponseEntity<OAuthLoginResponseDto> kakaoLogin(
             @RequestBody KakaoLoginParams kakaoLoginParams) {
         return ResponseEntity.ok().body(oAuthService.oAuthLogin(kakaoLoginParams));
+    }
+
+    // 구글 로그인 요청
+    @PostMapping("/api/v1/google/login")
+    public ResponseEntity<OAuthLoginResponseDto> googleLogin(@RequestBody GoogleLoginParams googleLoginParams) {
+        return ResponseEntity.status(HttpStatus.OK).body(oAuthService.oAuthLogin(googleLoginParams));
     }
 }
