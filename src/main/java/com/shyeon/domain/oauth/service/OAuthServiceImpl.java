@@ -5,10 +5,7 @@ import com.shyeon.domain.user.domain.User;
 import com.shyeon.domain.user.dto.Tokens;
 import com.shyeon.domain.user.repository.UserRepository;
 import com.shyeon.global.exception.customexception.UserCustomException;
-import com.shyeon.global.oauth.OAuthInfoResponse;
-import com.shyeon.global.oauth.OAuthLoginParams;
-import com.shyeon.global.oauth.OAuthProvider;
-import com.shyeon.global.oauth.RequestOAuthApiClientService;
+import com.shyeon.global.oauth.*;
 import com.shyeon.global.util.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,8 +19,14 @@ public class OAuthServiceImpl implements OAuthService {
     private final JwtProvider jwtProvider;
 
     @Override
-    public String responseOAuthCode(String provider, String code) {
-        return provider + " : " + code;
+    public OAuthAuthorizationDataResponseDto responseAuthData(String provider, OAuthRedirectDataDto data) {
+        OAuthProvider oAuthProvider = OAuthProvider.convert(provider);
+
+        if(oAuthProvider == OAuthProvider.NAVER) {
+            return NaverAuthorizationDataResponseDto.of(oAuthProvider, data);
+        }
+
+        return OAuthAuthorizationDataResponseDto.of(oAuthProvider, data.getCode());
     }
 
     @Override
