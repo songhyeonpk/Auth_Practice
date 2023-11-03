@@ -1,7 +1,8 @@
 package com.shyeon.domain.oauth.controller;
 
+import com.shyeon.domain.oauth.dto.OAuthAuthorizationDataResponseDto;
 import com.shyeon.domain.oauth.dto.OAuthLoginResponseDto;
-import com.shyeon.domain.oauth.dto.OAuthRedirectDateDto;
+import com.shyeon.domain.oauth.dto.OAuthRedirectDataDto;
 import com.shyeon.domain.oauth.dto.OAuthSignupRequestDto;
 import com.shyeon.domain.oauth.service.OAuthService;
 import com.shyeon.global.oauth.google.GoogleLoginParams;
@@ -32,10 +33,10 @@ public class OAuthController {
 
     // 소셜 서비스 Redirect URI
     @GetMapping("/{provider}/callback")
-    public ResponseEntity<String> getRedirectUri(
-            @PathVariable String provider, @RequestParam("code") String code) {
+    public ResponseEntity<OAuthAuthorizationDataResponseDto> getRedirectUri(
+            @PathVariable String provider, OAuthRedirectDataDto data) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(oAuthService.responseOAuthCode(provider, code));
+                .body(oAuthService.responseAuthData(provider, data));
     }
 
     // 카카오 로그인 요청
