@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -68,6 +69,17 @@ public class NaverApiClient implements OAuthApiClient {
 
     @Override
     public OAuthInfoResponse requestOAuthUserInfo(String accessToken) {
-        return null;
+        WebClient webClient = WebClient.create(apiUri);
+
+        NaverInfoResponse response = webClient.get()
+                .header("Authorization", "Bearer " + accessToken)
+                .retrieve()
+                .bodyToMono(NaverInfoResponse.class)
+                .block();
+
+        log.info(response.getOAuthId());
+        log.info(response.getOAuthNickname());
+
+        return response;
     }
 }
