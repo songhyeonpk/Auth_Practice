@@ -10,12 +10,12 @@ public class NaverAuthorizationDataResponseDto extends OAuthAuthorizationDataRes
 
     private String state;
 
-    public static NaverAuthorizationDataResponseDto of(OAuthProvider oAuthProvider, OAuthRedirectDataDto data) {
+    public static NaverAuthorizationDataResponseDto of(
+            OAuthProvider oAuthProvider, OAuthRedirectDataDto data) {
         return NaverAuthorizationDataResponseDto.builder()
                 .oAuthProvider(oAuthProvider)
                 .authorizationCode(data.getCode())
                 .state(data.getState())
                 .build();
     }
-
 }

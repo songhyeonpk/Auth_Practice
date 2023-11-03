@@ -4,16 +4,14 @@ import com.shyeon.global.oauth.OAuthApiClient;
 import com.shyeon.global.oauth.OAuthInfoResponse;
 import com.shyeon.global.oauth.OAuthLoginParams;
 import com.shyeon.global.oauth.OAuthProvider;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 
 @Component
 @Slf4j
@@ -50,15 +48,20 @@ public class NaverApiClient implements OAuthApiClient {
         requestParams.add("client_id", clientId);
         requestParams.add("client_secret", clientSecret);
 
-        NaverTokens tokens = webClient.post()
-                .headers(header -> {
-                    header.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-                    header.setAcceptCharset(Collections.singletonList(StandardCharsets.UTF_8));
-                })
-                .bodyValue(requestParams)
-                .retrieve()
-                .bodyToMono(NaverTokens.class)
-                .block();
+        NaverTokens tokens =
+                webClient
+                        .post()
+                        .headers(
+                                header -> {
+                                    header.setAccept(
+                                            Collections.singletonList(MediaType.APPLICATION_JSON));
+                                    header.setAcceptCharset(
+                                            Collections.singletonList(StandardCharsets.UTF_8));
+                                })
+                        .bodyValue(requestParams)
+                        .retrieve()
+                        .bodyToMono(NaverTokens.class)
+                        .block();
 
         log.info(tokens.getAccessToken());
         log.info(tokens.getRefreshToken());
@@ -71,11 +74,13 @@ public class NaverApiClient implements OAuthApiClient {
     public OAuthInfoResponse requestOAuthUserInfo(String accessToken) {
         WebClient webClient = WebClient.create(apiUri);
 
-        NaverInfoResponse response = webClient.get()
-                .header("Authorization", "Bearer " + accessToken)
-                .retrieve()
-                .bodyToMono(NaverInfoResponse.class)
-                .block();
+        NaverInfoResponse response =
+                webClient
+                        .get()
+                        .header("Authorization", "Bearer " + accessToken)
+                        .retrieve()
+                        .bodyToMono(NaverInfoResponse.class)
+                        .block();
 
         log.info(response.getOAuthId());
         log.info(response.getOAuthNickname());
