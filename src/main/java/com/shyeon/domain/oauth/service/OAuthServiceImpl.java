@@ -19,10 +19,11 @@ public class OAuthServiceImpl implements OAuthService {
     private final JwtProvider jwtProvider;
 
     @Override
-    public OAuthAuthorizationDataResponseDto responseAuthData(String provider, OAuthRedirectDataDto data) {
+    public OAuthAuthorizationDataResponseDto responseAuthData(
+            String provider, OAuthRedirectDataDto data) {
         OAuthProvider oAuthProvider = OAuthProvider.convert(provider);
 
-        if(oAuthProvider == OAuthProvider.NAVER) {
+        if (oAuthProvider == OAuthProvider.NAVER) {
             return NaverAuthorizationDataResponseDto.of(oAuthProvider, data);
         }
 

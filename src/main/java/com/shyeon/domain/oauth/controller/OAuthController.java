@@ -7,9 +7,8 @@ import com.shyeon.domain.oauth.dto.OAuthSignupRequestDto;
 import com.shyeon.domain.oauth.service.OAuthService;
 import com.shyeon.global.oauth.google.GoogleLoginParams;
 import com.shyeon.global.oauth.kakao.KakaoLoginParams;
-import javax.validation.Valid;
-
 import com.shyeon.global.oauth.naver.NaverLoginParams;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,7 +55,8 @@ public class OAuthController {
 
     // 네이버 로그인 요청
     @PostMapping("/api/v1/naver/login")
-    public ResponseEntity<OAuthLoginResponseDto> naverLogin(@RequestBody NaverLoginParams naverLoginParams) {
+    public ResponseEntity<OAuthLoginResponseDto> naverLogin(
+            @RequestBody NaverLoginParams naverLoginParams) {
         return ResponseEntity.status(HttpStatus.OK).body(oAuthService.oAuthLogin(naverLoginParams));
     }
 }
