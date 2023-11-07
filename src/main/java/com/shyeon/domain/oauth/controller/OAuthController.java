@@ -1,9 +1,6 @@
 package com.shyeon.domain.oauth.controller;
 
-import com.shyeon.domain.oauth.dto.OAuthAuthorizationDataResponseDto;
-import com.shyeon.domain.oauth.dto.OAuthLoginResponseDto;
-import com.shyeon.domain.oauth.dto.OAuthRedirectDataDto;
-import com.shyeon.domain.oauth.dto.OAuthSignupRequestDto;
+import com.shyeon.domain.oauth.dto.*;
 import com.shyeon.domain.oauth.service.OAuthService;
 import com.shyeon.global.oauth.google.GoogleLoginParams;
 import com.shyeon.global.oauth.kakao.KakaoLoginParams;
@@ -58,5 +55,18 @@ public class OAuthController {
     public ResponseEntity<OAuthLoginResponseDto> naverLogin(
             @RequestBody NaverLoginParams naverLoginParams) {
         return ResponseEntity.status(HttpStatus.OK).body(oAuthService.oAuthLogin(naverLoginParams));
+    }
+
+    // OAuth 회원가입 요청 v2
+    @PostMapping("/api/v1/oauth/user_v2")
+    public ResponseEntity<Long> oAuthRegisterV2(@RequestBody @Valid OAuthSignupRequestDtoV2 signupRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(oAuthService.oAuthRegisterV2(signupRequest));
+    }
+
+    // 카카오 로그인 요청 v2
+    @PostMapping("/api/v1/kakao/login_v2")
+    public ResponseEntity<OAuthLoginResponseDto> kakaoLoginV2(@RequestBody KakaoLoginParams kakaoLoginParams) {
+        return ResponseEntity.status(HttpStatus.OK).body(oAuthService.oAuthLoginV2(kakaoLoginParams));
     }
 }
