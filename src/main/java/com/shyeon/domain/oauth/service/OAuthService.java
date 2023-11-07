@@ -1,10 +1,8 @@
 package com.shyeon.domain.oauth.service;
 
-import com.shyeon.domain.oauth.dto.OAuthAuthorizationDataResponseDto;
-import com.shyeon.domain.oauth.dto.OAuthLoginResponseDto;
-import com.shyeon.domain.oauth.dto.OAuthRedirectDataDto;
-import com.shyeon.domain.oauth.dto.OAuthSignupRequestDto;
+import com.shyeon.domain.oauth.dto.*;
 import com.shyeon.global.oauth.OAuthLoginParams;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface OAuthService {
 
@@ -12,8 +10,18 @@ public interface OAuthService {
     OAuthAuthorizationDataResponseDto responseAuthData(String provider, OAuthRedirectDataDto data);
 
     // OAuth 로그인
+    @Transactional
     OAuthLoginResponseDto oAuthLogin(OAuthLoginParams oAuthLoginParams);
 
     // OAuth 회원가입
+    @Transactional
     Long oAuthRegister(OAuthSignupRequestDto signupRequest, String oAuthProvider);
+
+    // OAuth 로그인 v2
+    @Transactional
+    OAuthLoginResponseDto oAuthLoginV2(OAuthLoginParams oAuthLoginParams);
+
+    // OAuth 회원가입 v2
+    @Transactional
+    Long oAuthRegisterV2(OAuthSignupRequestDtoV2 signupRequest);
 }
