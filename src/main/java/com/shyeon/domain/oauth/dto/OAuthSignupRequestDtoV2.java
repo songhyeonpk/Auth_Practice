@@ -1,10 +1,9 @@
 package com.shyeon.domain.oauth.dto;
 
-import lombok.Getter;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import lombok.Getter;
 
 // OAuth 회원가입 요청정보 v2
 @Getter

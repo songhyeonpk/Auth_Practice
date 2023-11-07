@@ -90,10 +90,12 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     private OAuthLoginResponseDto responseOAuthLoginV2(OAuthInfoResponse response) {
-        UserV2 user = userV2Repository.findUserBySnsUser(response.getOAuthProvider(), response.getOAuthId());
+        UserV2 user =
+                userV2Repository.findUserBySnsUser(
+                        response.getOAuthProvider(), response.getOAuthId());
 
         // 로그인 진행, JWT 발급
-        if(user != null) {
+        if (user != null) {
             String accessToken = jwtProvider.generateAccessToken(user.getEmail());
 
             return OAuthLoginSuccessResponseDtoV2.of(true, user, Tokens.from(accessToken));
@@ -114,23 +116,26 @@ public class OAuthServiceImpl implements OAuthService {
         OAuthProvider provider = OAuthProvider.convert(signupRequest.getOauthProvider());
 
         // SnsUser 생성
-        SnsUser snsUser = SnsUser.builder()
-                .oAuthProvider(provider)
-                .oAuthId(signupRequest.getOauthId())
-                .build();
+        SnsUser snsUser =
+                SnsUser.builder()
+                        .oAuthProvider(provider)
+                        .oAuthId(signupRequest.getOauthId())
+                        .build();
 
         // SnsUser 저장
         snsUserRepository.save(snsUser);
 
         // 비밀번호 암호화
-        String encryptPassword = passwordEncoder.encrypt(signupRequest.getEmail(), signupRequest.getPassword());
+        String encryptPassword =
+                passwordEncoder.encrypt(signupRequest.getEmail(), signupRequest.getPassword());
 
         // User 생성
-        UserV2 user = UserV2.builder()
-                .email(signupRequest.getEmail())
-                .password(encryptPassword)
-                .nickname(signupRequest.getNickname())
-                .build();
+        UserV2 user =
+                UserV2.builder()
+                        .email(signupRequest.getEmail())
+                        .password(encryptPassword)
+                        .nickname(signupRequest.getNickname())
+                        .build();
 
         // user 정보에 Sns 정보 셋팅
         user.setSnsUser(snsUser);
@@ -140,7 +145,7 @@ public class OAuthServiceImpl implements OAuthService {
 
     // 이메일 중복 확인
     private void existsEmail(String email) {
-        if(userRepository.existsByEmail(email)) {
+        if (userRepository.existsByEmail(email)) {
             throw UserCustomException.ALREADY_EMAIL;
         }
     }

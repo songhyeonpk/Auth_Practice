@@ -59,14 +59,17 @@ public class OAuthController {
 
     // OAuth 회원가입 요청 v2
     @PostMapping("/api/v1/oauth/user_v2")
-    public ResponseEntity<Long> oAuthRegisterV2(@RequestBody @Valid OAuthSignupRequestDtoV2 signupRequest) {
+    public ResponseEntity<Long> oAuthRegisterV2(
+            @RequestBody @Valid OAuthSignupRequestDtoV2 signupRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(oAuthService.oAuthRegisterV2(signupRequest));
     }
 
     // 카카오 로그인 요청 v2
     @PostMapping("/api/v1/kakao/login_v2")
-    public ResponseEntity<OAuthLoginResponseDto> kakaoLoginV2(@RequestBody KakaoLoginParams kakaoLoginParams) {
-        return ResponseEntity.status(HttpStatus.OK).body(oAuthService.oAuthLoginV2(kakaoLoginParams));
+    public ResponseEntity<OAuthLoginResponseDto> kakaoLoginV2(
+            @RequestBody KakaoLoginParams kakaoLoginParams) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(oAuthService.oAuthLoginV2(kakaoLoginParams));
     }
 }
